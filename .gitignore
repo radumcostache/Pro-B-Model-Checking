@@ -1,0 +1,9 @@
+**/.metadata
+*.project
+**/.settings
+*.bcc
+*.bpo
+*.bpr
+*.bps
+*.bcm
+
