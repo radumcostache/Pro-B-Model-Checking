@@ -27,6 +27,7 @@
         <org.eventb.core.guard name="." org.eventb.core.label="grd2" org.eventb.core.predicate="d ∉ written_data"/>
         <org.eventb.core.guard name="/" org.eventb.core.label="grd3" org.eventb.core.predicate="write_ptr + 1 ≠ read_ptr"/>
         <org.eventb.core.guard name="0" org.eventb.core.label="grd4" org.eventb.core.predicate="write_ptr ≠ LEN"/>
+        <org.eventb.core.guard name="1" org.eventb.core.label="grd5" org.eventb.core.predicate="write_ptr ∉ dom(buf)"/>
     </org.eventb.core.event>
     <org.eventb.core.event name="2" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="consumer_reads">
         <org.eventb.core.guard name="'" org.eventb.core.label="grd1" org.eventb.core.predicate="write_ptr ≠ read_ptr"/>
@@ -35,6 +36,7 @@
         <org.eventb.core.action name="*" org.eventb.core.assignment="full_idx ≔ full_idx ∖ {read_ptr}" org.eventb.core.label="act3"/>
         <org.eventb.core.action name="+" org.eventb.core.assignment="read_ptr ≔ read_ptr + 1" org.eventb.core.label="act4"/>
         <org.eventb.core.guard name="," org.eventb.core.label="grd2" org.eventb.core.predicate="read_ptr ∈ 0‥LEN−1"/>
+        <org.eventb.core.guard name="-" org.eventb.core.label="grd3" org.eventb.core.predicate="read_ptr ∈ dom(buf)"/>
     </org.eventb.core.event>
     <org.eventb.core.variable name="3" org.eventb.core.identifier="processed_data"/>
     <org.eventb.core.invariant name="4" org.eventb.core.label="inv5" org.eventb.core.predicate="processed_data ⊆ ℕ"/>
