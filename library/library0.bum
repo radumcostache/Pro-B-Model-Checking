@@ -5,9 +5,12 @@
         <org.eventb.core.action name="(" org.eventb.core.assignment="owner ≔ ∅" org.eventb.core.label="act2"/>
         <org.eventb.core.action name=")" org.eventb.core.assignment="books ≔ ∅" org.eventb.core.label="act3"/>
         <org.eventb.core.action name="*" org.eventb.core.assignment="stock ≔ ∅" org.eventb.core.label="act4"/>
+        <org.eventb.core.action name="+" org.eventb.core.assignment="curr_day ≔ 0 " org.eventb.core.label="act5"/>
+        <org.eventb.core.action name="," org.eventb.core.assignment="book_owner ≔ ∅" org.eventb.core.label="act6"/>
+        <org.eventb.core.action name="-" org.eventb.core.assignment="days_left ≔ ∅" org.eventb.core.label="act7"/>
     </org.eventb.core.event>
     <org.eventb.core.variable name="(" org.eventb.core.identifier="acc"/>
-    <org.eventb.core.invariant name=")" org.eventb.core.label="inv1" org.eventb.core.predicate="acc ⊆ ACC"/>
+    <org.eventb.core.invariant name=")" org.eventb.core.label="inv1" org.eventb.core.predicate="acc ⊆ ACC" org.eventb.core.theorem="true"/>
     <org.eventb.core.seesContext name="*" org.eventb.core.target="c0"/>
     <org.eventb.core.variable name="+" org.eventb.core.identifier="owner"/>
     <org.eventb.core.invariant name="," org.eventb.core.label="inv2" org.eventb.core.predicate="owner ∈ acc→USR"/>
@@ -28,5 +31,58 @@
         <org.eventb.core.guard name="(" org.eventb.core.label="grd1" org.eventb.core.predicate="a∈acc"/>
         <org.eventb.core.action name=")" org.eventb.core.assignment="owner ≔ {a}⩤owner" org.eventb.core.label="act1"/>
         <org.eventb.core.action name="*" org.eventb.core.assignment="acc≔acc∖{a}" org.eventb.core.label="act2"/>
+        <org.eventb.core.action name="+" org.eventb.core.assignment="days_left ≔ {a}⩤days_left" org.eventb.core.label="act3"/>
+        <org.eventb.core.action name="," org.eventb.core.assignment="book_owner ≔ {a}⩤book_owner" org.eventb.core.label="act4"/>
+    </org.eventb.core.event>
+    <org.eventb.core.variable name="5" org.eventb.core.identifier="curr_day"/>
+    <org.eventb.core.invariant name="6" org.eventb.core.label="inv5" org.eventb.core.predicate="curr_day ∈ ℕ"/>
+    <org.eventb.core.variable name="7" org.eventb.core.identifier="book_owner"/>
+    <org.eventb.core.invariant name="8" org.eventb.core.label="inv6" org.eventb.core.predicate="book_owner ∈ acc ⇸ books"/>
+    <org.eventb.core.variable name="9" org.eventb.core.identifier="days_left"/>
+    <org.eventb.core.invariant name=":" org.eventb.core.label="inv7" org.eventb.core.predicate="days_left ∈ acc⇸ ℕ"/>
+    <org.eventb.core.event name=";" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="PASS_DAYS">
+        <org.eventb.core.guard name="'" org.eventb.core.label="grd1" org.eventb.core.predicate="∀a·a∈ dom(days_left) ⇒ curr_day ≤ days_left(a)  "/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="curr_day ≔ curr_day + 1" org.eventb.core.label="act1"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="=" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="BORROW_BOOK">
+        <org.eventb.core.parameter name="'" org.eventb.core.identifier="a"/>
+        <org.eventb.core.parameter name="(" org.eventb.core.identifier="b"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="grd1" org.eventb.core.predicate="a ∈ acc"/>
+        <org.eventb.core.guard name="*" org.eventb.core.label="grd2" org.eventb.core.predicate="b ∈ books"/>
+        <org.eventb.core.guard name="+" org.eventb.core.label="grd3" org.eventb.core.predicate="a ∉dom(book_owner)"/>
+        <org.eventb.core.action name="," org.eventb.core.assignment="book_owner(a) ≔ b" org.eventb.core.label="act1"/>
+        <org.eventb.core.action name="-" org.eventb.core.assignment="days_left(a) ≔ curr_day + 3" org.eventb.core.label="act2"/>
+        <org.eventb.core.action name="." org.eventb.core.assignment="stock(b) ≔ stock(b) − 1" org.eventb.core.label="act3"/>
+        <org.eventb.core.guard name="/" org.eventb.core.label="grd4" org.eventb.core.predicate="stock(b) &gt; 0"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="&gt;" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="RETURN_BOOK">
+        <org.eventb.core.parameter name="'" org.eventb.core.identifier="a"/>
+        <org.eventb.core.guard name="." org.eventb.core.label="grd3" org.eventb.core.predicate="a∈acc"/>
+        <org.eventb.core.guard name="*" org.eventb.core.label="grd2" org.eventb.core.predicate="a∈ dom(days_left) ∧ days_left(a) ≠ curr_day"/>
+        <org.eventb.core.action name="+" org.eventb.core.assignment="book_owner ≔  {a}⩤ book_owner" org.eventb.core.label="act1"/>
+        <org.eventb.core.action name="," org.eventb.core.assignment="stock(book_owner(a)) ≔ stock(book_owner(a)) + 1" org.eventb.core.label="act2"/>
+        <org.eventb.core.action name="-" org.eventb.core.assignment="days_left ≔ {a}⩤days_left" org.eventb.core.label="act3"/>
+        <org.eventb.core.guard name="0" org.eventb.core.label="grd5" org.eventb.core.predicate="a ∈ dom(book_owner)"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="?" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="FORCE_RETURN">
+        <org.eventb.core.parameter name="'" org.eventb.core.identifier="a"/>
+        <org.eventb.core.guard name="*" org.eventb.core.label="grd2" org.eventb.core.predicate="a ∈dom(days_left) ∧ days_left(a) = curr_day"/>
+        <org.eventb.core.guard name="+" org.eventb.core.label="grd3" org.eventb.core.predicate="a ∈ acc"/>
+        <org.eventb.core.action name="," org.eventb.core.assignment="book_owner ≔ {a} ⩤ book_owner" org.eventb.core.label="act1"/>
+        <org.eventb.core.action name="-" org.eventb.core.assignment="days_left ≔ {a} ⩤ days_left" org.eventb.core.label="act2"/>
+        <org.eventb.core.action name="." org.eventb.core.assignment="stock(book_owner(a)) ≔ stock(book_owner(a)) + 1" org.eventb.core.label="act3"/>
+        <org.eventb.core.guard name="/" org.eventb.core.label="grd4" org.eventb.core.predicate="a ∈ dom(book_owner)"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="@" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="ADD_BOOK">
+        <org.eventb.core.parameter name="'" org.eventb.core.identifier="b"/>
+        <org.eventb.core.guard name="(" org.eventb.core.label="grd1" org.eventb.core.predicate="b ∈ BOOKS"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="grd2" org.eventb.core.predicate="b ∉books"/>
+        <org.eventb.core.action name="*" org.eventb.core.assignment="books ≔ books ∪ {b}" org.eventb.core.label="act1"/>
+        <org.eventb.core.action name="+" org.eventb.core.assignment="stock(b) ≔ 1" org.eventb.core.label="act2"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="A" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="INC_BOOK">
+        <org.eventb.core.parameter name="'" org.eventb.core.identifier="b"/>
+        <org.eventb.core.guard name="(" org.eventb.core.label="grd1" org.eventb.core.predicate="b ∈ books"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="stock(b) ≔ stock(b) + 1" org.eventb.core.label="act1"/>
     </org.eventb.core.event>
 </org.eventb.core.machineFile>

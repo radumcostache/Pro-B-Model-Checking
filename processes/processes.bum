@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<org.eventb.core.machineFile org.eventb.core.configuration="org.eventb.core.fwd" version="5">
+    <org.eventb.core.event name="'" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="INITIALISATION">
+        <org.eventb.core.action name="'" org.eventb.core.assignment="proc_a_time_since_backup ≔ 0" org.eventb.core.label="act1"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="proc_b_time_since_backup ≔ 0" org.eventb.core.label="act2"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="proc_a_action ≔ WORKING" org.eventb.core.label="act3"/>
+        <org.eventb.core.action name="*" org.eventb.core.assignment="proc_b_action ≔ WORKING" org.eventb.core.label="act4"/>
+    </org.eventb.core.event>
+    <org.eventb.core.seesContext name="(" org.eventb.core.target="c0"/>
+    <org.eventb.core.variable name=")" org.eventb.core.identifier="proc_a_time_since_backup"/>
+    <org.eventb.core.variable name="*" org.eventb.core.identifier="proc_b_time_since_backup"/>
+    <org.eventb.core.invariant name="+" org.eventb.core.label="inv1" org.eventb.core.predicate="proc_a_time_since_backup ∈ −1‥MAX_TIME_WITHOUT_BACKUP"/>
+    <org.eventb.core.invariant name="," org.eventb.core.label="inv2" org.eventb.core.predicate="proc_b_time_since_backup ∈ −1‥MAX_TIME_WITHOUT_BACKUP"/>
+    <org.eventb.core.variable name="-" org.eventb.core.identifier="proc_a_action"/>
+    <org.eventb.core.variable name="." org.eventb.core.identifier="proc_b_action"/>
+    <org.eventb.core.invariant name="/" org.eventb.core.label="inv3" org.eventb.core.predicate="{proc_a_action, proc_b_action} ⊆ ACTIONS" org.eventb.core.theorem="true"/>
+    <org.eventb.core.event name="0" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="TIME_PASSES">
+        <org.eventb.core.action name="'" org.eventb.core.assignment="proc_a_time_since_backup ≔ proc_a_time_since_backup + 1" org.eventb.core.label="act1"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="proc_b_time_since_backup ≔ proc_b_time_since_backup + 1" org.eventb.core.label="act2"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="proc_a_action ≔ WORKING" org.eventb.core.label="act3"/>
+        <org.eventb.core.action name="*" org.eventb.core.assignment="proc_b_action ≔ WORKING" org.eventb.core.label="act4"/>
+        <org.eventb.core.guard name="+" org.eventb.core.label="grd1" org.eventb.core.predicate="{proc_a_time_since_backup, proc_b_time_since_backup} ⊆ −1‥MAX_TIME_WITHOUT_BACKUP − 1"/>
+        <org.eventb.core.guard name="," org.eventb.core.label="grd2" org.eventb.core.predicate="{proc_a_action, proc_b_action} ⊆ {TRANSFERRING_DATA, WORKING}"/>
+        <org.eventb.core.guard name="-" org.eventb.core.label="grd3" org.eventb.core.predicate="{proc_a_time_since_backup, proc_b_time_since_backup} ⊈ −1‥MAX_TIME_WITHOUT_BACKUP − 2 ⇒ {proc_a_action, proc_b_action} ⊆ {TRANSFERRING_DATA}"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="2" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="PROC_A_SENDS_BACKUP">
+        <org.eventb.core.action name="'" org.eventb.core.assignment="proc_a_action ≔ START_SENDING_BACKUP" org.eventb.core.label="act1"/>
+        <org.eventb.core.guard name="(" org.eventb.core.label="grd1" org.eventb.core.predicate="proc_a_action = WORKING"/>
+        <org.eventb.core.guard name="+" org.eventb.core.label="grd2" org.eventb.core.predicate="proc_b_action ≠ START_SENDING_BACKUP"/>
+        <org.eventb.core.guard name="*" org.eventb.core.label="grd3" org.eventb.core.predicate="proc_a_time_since_backup &gt; 0"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="3" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="PROC_A_RECEIVES_BACKUP">
+        <org.eventb.core.action name="'" org.eventb.core.assignment="proc_a_action ≔ TRANSFERRING_DATA" org.eventb.core.label="act1"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="proc_b_action ≔ TRANSFERRING_DATA" org.eventb.core.label="act2"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="grd1" org.eventb.core.predicate="proc_a_action = WORKING"/>
+        <org.eventb.core.action name="*" org.eventb.core.assignment="proc_b_time_since_backup ≔ −1" org.eventb.core.label="act3"/>
+        <org.eventb.core.guard name="+" org.eventb.core.label="grd2" org.eventb.core.predicate="proc_b_action = START_SENDING_BACKUP"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="5" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="PROC_B_SENDS_BACKUP">
+        <org.eventb.core.guard name="'" org.eventb.core.label="grd1" org.eventb.core.predicate="proc_b_action = WORKING"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="proc_b_action ≔ START_SENDING_BACKUP" org.eventb.core.label="act1"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="grd2" org.eventb.core.predicate="proc_a_action ≠ START_SENDING_BACKUP"/>
+        <org.eventb.core.guard name="*" org.eventb.core.label="grd3" org.eventb.core.predicate="proc_b_time_since_backup &gt; 0"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="6" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="PROC_B_RECEIVES_BACKUP">
+        <org.eventb.core.guard name="'" org.eventb.core.label="grd1" org.eventb.core.predicate="proc_b_action = WORKING"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="proc_b_action ≔ TRANSFERRING_DATA" org.eventb.core.label="act1"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="proc_a_action ≔ TRANSFERRING_DATA" org.eventb.core.label="act2"/>
+        <org.eventb.core.action name="*" org.eventb.core.assignment="proc_a_time_since_backup ≔ −1" org.eventb.core.label="act3"/>
+        <org.eventb.core.guard name="+" org.eventb.core.label="grd2" org.eventb.core.predicate="proc_a_action = START_SENDING_BACKUP"/>
+    </org.eventb.core.event>
+</org.eventb.core.machineFile>
